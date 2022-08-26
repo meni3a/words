@@ -164,6 +164,10 @@ function getAnswers(word) {
     return answers;
 }
 function play() {
+    const playBtn = document.getElementById('start-btn');
+    if (!playBtn)
+        throw new Error('play button not found');
+    playBtn.innerText = 'Next';
     isCorectClicked = false;
     const container = document.getElementById("container");
     if (!container)
