@@ -1,5 +1,4 @@
-"use strict";
-const dataArray = [
+const dataArray: string[][] = [
     ["איך", "כִּיף", "كيف"],
     ["איפה", "וֵין", "وِين"],
     ["מתי", "וֵינתַא / אֵימתַא", "وِينْتى / إِيمْتى"],
@@ -64,15 +63,19 @@ const dataArray = [
     // ["מחר", "בֻּכְּרַא", "بُكْرَا"],
     // ["אתמול", "מבַּארֶח", "مْبارِح"]
 ];
+
 const totalSkillLevel = 4;
+
 class Word {
-    constructor(fields) {
-        this.points = 0;
-        this.lastPracticeDate = new Date();
-        this.totalPracticeCount = 0;
+    id!: number;
+    hebrew!: string;
+    arabic!: string;
+    hebrewTransliterated!: string;
+
+    constructor(fields: Partial<Word>) {
         Object.assign(this, fields);
     }
-    setPoint(points) {
+    setPoint(points: number) {
         if (points > totalSkillLevel) {
             this.points = totalSkillLevel;
         }
@@ -83,26 +86,38 @@ class Word {
             this.points = points;
         }
     }
+    points = 0
+    lastPracticeDate = new Date()
+    totalPracticeCount = 0
 }
-function convertDataToObjects(data) {
+
+
+
+function convertDataToObjects(data: string[][]) {
     return data.map((row, id) => {
         const [hebrew, hebrewTransliterated, arabic] = row;
         return new Word({ id, hebrew, hebrewTransliterated, arabic });
     });
 }
-const range = (n) => Array.from(Array(n).keys());
-function pickRandomWords(numberOfWords) {
-    const randomIndexes = new Set();
+
+const range = (n: number) => Array.from(Array(n).keys())
+
+function pickRandomWords(numberOfWords: number) {
+
+    const randomIndexes = new Set<number>();
     while (randomIndexes.size < numberOfWords) {
         randomIndexes.add(Math.floor(Math.random() * words.length));
     }
     return [...randomIndexes].map(i => words[i]);
 }
-function renderCard(word) {
+
+function renderCard(word: Word) {
+
     const answers = getAnswers(word);
     const randomLanguage = Math.floor(Math.random() * 2);
     const mainLang = randomLanguage === 0 ? 'hebrew' : 'arabic';
     const answersLang = randomLanguage === 0 ? 'arabic' : 'hebrew';
+
     return `
     <div class="card-container center">
         <div class="flip-card center">
@@ -128,28 +143,30 @@ function renderCard(word) {
     </div>
     `;
 }
-function onAnswer(id) {
-    var _a, _b;
-    if (!lastWord || isCorectClicked)
-        return;
+
+function onAnswer(id: number) {
+    if (!lastWord || isCorectClicked) return;
     if (lastWord.id === id) {
-        (_a = document.getElementById(`ans-${id}`)) === null || _a === void 0 ? void 0 : _a.classList.add('correct');
+        document.getElementById(`ans-${id}`)?.classList.add('correct');
         lastWord.totalPracticeCount++;
         lastWord.lastPracticeDate = new Date();
         const cardElement = document.getElementsByClassName('flip-card')[0];
-        if (!cardElement)
-            throw new Error('card element not found');
+        if (!cardElement) throw new Error('card element not found');
         cardElement.classList.add("to-flip");
         isCorectClicked = true;
+
     }
     else {
-        (_b = document.getElementById(`ans-${id}`)) === null || _b === void 0 ? void 0 : _b.classList.add('wrong');
+        document.getElementById(`ans-${id}`)?.classList.add('wrong');
         lastWord.totalPracticeCount--;
     }
+
 }
-let lastWord = undefined;
+
+let lastWord: Word | undefined = undefined;
 let isCorectClicked = false;
-function getAnswers(word) {
+
+function getAnswers(word: Word) {
     const answers = [...pickRandomWords(3), word];
     // mix the answers
     for (let i = answers.length - 1; i > 0; i--) {
@@ -158,45 +175,48 @@ function getAnswers(word) {
     }
     return answers;
 }
+
 function play() {
     isCorectClicked = false;
     const container = document.getElementById("container");
-    if (!container)
-        return;
+    if (!container) return;
     if (lastWord) {
         lastWord.totalPracticeCount++;
         lastWord.lastPracticeDate = new Date();
         words.push(lastWord);
-        syncWords(words);
+        syncWords(words)
     }
     lastWord = words.shift();
-    if (!lastWord)
-        return;
+    if (!lastWord) return;
     container.innerHTML = renderCard(lastWord);
 }
-function syncWords(data) {
+
+function syncWords(data: Word[]) {
     data.forEach(word => word.setPoint(calculatePoints(word)));
     words = data.sort((a, b) => a.points - b.points);
     localStorage.setItem('words', JSON.stringify(words));
 }
-let words = [];
+
+let words: Word[] = [];
+
 function getWords() {
     const wordsString = localStorage.getItem("words");
     if (wordsString) {
         const data = JSON.parse(wordsString);
-        return data.map((word) => {
+        return data.map((word: Word) => {
             return new Word(word);
         });
-    }
-    else {
+    } else {
         return convertDataToObjects(dataArray);
     }
 }
-function calculatePoints(word) {
-    const getPrecentage = (num, total) => Math.floor((num / total) * 100);
-    const calculateFirstTwoStartsByMintuesSinceLastPractice = (date) => {
+
+function calculatePoints(word: Word) {
+    const getPrecentage = (num: number, total: number) => Math.floor((num / total) * 100);
+    const calculateFirstTwoStartsByMintuesSinceLastPractice = (date: Date) => {
         const maxNumnerOfMinutes = 10;
         const minutesSinceLastPractice = Math.floor((new Date().getTime() - date.getTime()) / (1000 * 60));
+
         if (minutesSinceLastPractice > maxNumnerOfMinutes) {
             return 0;
         }
@@ -209,14 +229,20 @@ function calculatePoints(word) {
                 return 2;
             }
         }
-    };
+    }
+
     const calculateLastTwoStartsByAmountOfPractice = () => {
         return Math.min(Math.round(word.totalPracticeCount / 2), 2);
-    };
+    }
+
+
     return calculateFirstTwoStartsByMintuesSinceLastPractice(new Date(word.lastPracticeDate)) + calculateLastTwoStartsByAmountOfPractice();
+
 }
+
 function setupApp() {
     words = getWords();
     syncWords(words);
 }
+
 window.onload = setupApp;
