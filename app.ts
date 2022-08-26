@@ -1,67 +1,70 @@
+const audioPath = 'https://s3.amazonaws.com/appforest_uf/';
+
+
 const dataArray: string[][] = [
-    ["איך", "כִּיף", "كيف"],
-    ["איפה", "וֵין", "وِين"],
-    ["מתי", "וֵינתַא / אֵימתַא", "وِينْتى / إِيمْتى"],
-    ["כמה", "כַּם, אַכַּאם, אַכַּם", "كَم، أَكام، أَكَم"],
-    ["למה", "לֵיש", "لِيش"],
-    ["מי", "מִין", "مين"],
-    ["איזה", "אַיّ", "أَيّ"],
-    ["לאן", "לַוֵין", "لَوِين"],
+    ["איך", "כִּיף", "كيف", "f1492943198336x339902958134189250/U1_Milon_2.mp3"],
+    ["איפה", "וֵין", "وِين", "f1492943187830x667188051389530200/U1_Milon_3.mp3"],
+    ["מתי", "וֵינתַא / אֵימתַא", "وِينْتى / إِيمْتى", "f1493012160286x932953111827373600/U3_Milon_120.mp3"],
+    ["כמה (how much)", "כַּם, אַכַּאם, אַכַּם", "كَم، أَكام، أَكَم", "f1493396340189x754757807822898000/U9_milon_397.mp3"],
+    ["למה", "לֵיש", "لِيش", "f1493011790867x885510609950870200/U3_Milon_115.mp3"],
+    ["מי", "מִין", "مين", "f1492942875283x936175890965387300/U1_Milon_25.mp3"],
+    ["איזה", "אַיّ", "أَيّ", "f1492943210926x643055182183161300/U1_Milon_1.mp3"],
+    ["לאן", "לַוֵין", "لَوِين",'f1493011757557x427498920587822800/U3_Milon_113.mp3'],
     ["האם", "הַל", "هل"],
-    ["כן", "אַיוַה", "أَيْوة"],
-    ["לא", "לַא", "لا"],
-    ["אין", "פִשّ, מַפִשّ", "فِشّ، مَفِشّ"],
-    ["יש לי", "עִנדִי ", "عِنْدي"],
+    ["כן", "אַיוַה", "أَيْوة","f1492942913270x742871407652273800/U1_Milon_23.mp3"],
+    ["לא", "לַא", "لا","f1492942898714x460073119029402700/U1_Milon_24.mp3"],
+    ["אין", "פִשّ, מַפִשّ", "فِشّ، مَفِشّ","f1492979409938x449410450877621760/U2_Milon_47.mp3"],
+    ["יש לי", "עִנדִי ", "عِنْدي","f1492979786266x992548565380275200/U2_Milon_68.mp3"],
     ["יאללה", "יאללה", "يلّا"],
-    ["בסדר", "מַאשִי, תַמַאם", "ماشي، تَمام"],
+    ["בסדר", "מַאשִי, תַמַאם", "ماشي، تَمام","f1492979535915x350626934552565250/U2_Milon_55.mp3"],
     ["לא אפשרי", "מִש מֻמְכֵּן", "مش ممكن"],
-    ["אפשרי", "מֻמְכֵּן", "ممكن"],
-    ["אני", "אַנַא", "أَنا"],
-    ["את", "אִנתִ", "إنْتِ"],
+    ["אפשרי", "מֻמְכֵּן", "ممكن","f1493409663723x335150961065664900/U10_milon_420.mp3"],
+    ["אני", "אַנַא", "أَنا","f1492943163168x813440178288146800/U1_Milon_5.mp3"],
+    ["את", "אִנתִ", "إنْتِ","f1492943152334x153234329074621220/U1_Milon_6.mp3"],
     ["אתה", "אִנתִ", "إنْتِ"],
-    ["אתם", "אִנתוּ", "إنْتو"],
-    ["אתן", "אִנתֶן", "إنْتِن"],
-    ["אנחנו", "אִחנַא", "إحْنا"],
-    ["הוא", "הווא", "هُوَّ"],
-    ["היא", "הייא", "هِيَّ"],
-    ["הם", "הֻמֶّ", "هُمِّ"],
-    ["הן", "הִנֶّי", "هِنِّ"],
-    ["אבא", "אבו", "ابو"],
-    ["אמא", "אִםﬞ", "إمّ"],
-    ["אח", "אַח׳", "أخ"],
-    ["אחות", "אֻחְ׳ת", "أخت"],
-    ["בן", "אִבְּן", "إِبْن"],
-    ["בת", "בִּנְת", "بِنْت"],
-    ["ילדים", "וְלַאד", "ولاد"],
+    ["אתם", "אִנתוּ", "إنْتو","f1492943119886x422576670767739400/U1_Milon_8.mp3"],
+    ["אתן", "אִנתֶן", "إنْتِن","f1492943107248x810886760242283400/U1_Milon_9.mp3"],
+    ["אנחנו", "אִחנַא", "إحْنا","f1492943174774x572442400269210400/U1_Milon_4.mp3"],
+    ["הוא", "הווא", "هُوَّ","f1492943014051x625990973785519600/U1_Milon_16.mp3"],
+    ["היא", "הייא", "هِيَّ","f1492943001899x999446003930643200/U1_Milon_17.mp3"],
+    ["הם", "הֻמֶّ", "هُمِّ", "f1492942990108x852508905343711400/U1_Milon_18.mp3"],
+    ["הן", "הִנֶّי", "هِنِّ","f1492942977542x769368473440408700/U1_Milon_19.mp3"],
+    ["אבא", "אבו", "ابو","f1492979229436x960712481057271400/U2_Milon_42.mp3"],
+    ["אמא", "אִםﬞ", "إمّ","f1492979423862x572760109789669500/U2_Milon_48.mp3"],
+    ["אח", "אַח'וּ", "أَخو", "f1493140888664x519615309778600960/U5_Milon_170.mp3"],
+    ["אחות", "אֻחְ׳ת", "أخت", "f1493140888664x519615309778600960/U5_Milon_170.mp3"],
+    ["בן", "אִבְּן", "إِبْن","f1492979522368x841792689403519000/U2_Milon_54.mp3"],
+    ["בת", "בִּנְת", "بِنْت", "f1492979577513x790522691560909200/U2_Milon_57.mp3"],
+    ["ילדים", "וְלַאד", "ولاد", "f1492979706031x799107669619843300/U2_Milon_64.mp3"],
     ["דוד מצד האמא", "חַ׳אל", "خَال"],
     ["דוד מצד האבא", "עַםﬞ", "عَمّ"],
-    ["סבא", "סִיד", "سيد"],
-    ["סבתא", "סִתﬞ", "ستّ"],
-    ["אישה", "מַרַה", "مَرَة"],
+    ["סבא", "סִיד", "سيد", "f1493141300127x309150260174647000/U5_Milon_200.mp3"],
+    ["סבתא", "סִתﬞ", "ستّ", "f1493141318078x629026885377243100/U5_Milon_201.mp3"],
+    ["אשה (אשת איש)", "מַרַה", "مَرَة"],
     ["כי", "לִאַנّוֹ", "لِأَنُّه"],
     ["ב..", "פִי", "في"],
     ["אם", "אִדַ׳א", "إِذَا"],
     ["לפני", "אִלַﬞא", "إِلَّا"],
-    ["בגלל", "עַשַאן", "عَشان"],
-    ["אבל", "בַּסّ", "بَسّ"],
-    ["גם", "כַּמַאן", "كَمان"],
-    ["או", "האוו", "أَوْ"],
+    ["בגלל", "עַשַאן", "عَشان","f1498307093512x901914935791865000/Uex1_Milon_981.mp3"],
+    ["אבל/רק", "בַּסّ", "بَسّ", "f1493140295019x959545366931706700/U4_Milon_132.mp3"],
+    ["גם", "כַּמַאן", "كَمان", "f1492943051919x805305170128122000/U1_Milon_13.mp3"],
+    ["או", "האוו", "أَوْ", "f1493396772762x996301860548555900/U10_milon_415.mp3"],
     ["או (השוואה)", "וִלַﬞא", "ولّا"],
     ["אלא", "אִלַﬞא", "إِلَّا"],
     ["לדוגמא", "מַתַ׳לַן", "مثلاً"],
-    ["כדי", "עַשַאן", "عَشان"],
-    ["אפילו", "חַתַّא", "حَتّى"],
+    ["כדי", "עַשַאן", "عَشان", "f1498423986834x841086538275703800/Uex1_Milon_1188.mp3"],
+    ["אפילו", "חַתַّא", "حَتّى","f1498306699562x382187491515651300/Uex1_Milon_963.mp3"],
     ["אל\\ל..", "עַלַא", "على"],
-    ["אחרי", "בַּעְד", "بعد"],
+    ["אחרי", "בַּעֶד-מַא", "بَعِد-ما", "f1493409633880x621898252051323600/U10_milon_418.mp3"],
     ["שניה", "תַ׳אנְיֵה", "ثَانْيِة"],
-    ["דקה", "דַקִיקַה", "دَقِيقَة"],
-    ["שעה", "סַאעַה", "سَاعَة"],
+    ["דקה", "דַקִיקַה", "دَقِيقَة", "f1493394699766x623942659702152100/U8_milon_321.mp3"],
+    ["שעה", "סַאעַה", "سَاعَة", "f1493382560409x530039839912205950/U10_milon_454.mp3"],
     ["יום", "יוֹם", "يُوم"],
-    ["שבוע", "אֻסְבּוּע", "أسبوع"],
-    ["שנה", "סַנֵה", "سَنِة"],
+    ["שבוע", "אֻסְבּוּע", "أسبوع", "f1493146214003x928177577909082100/U6_Milon_266.mp3"],
+    ["שנה", "סַנֵה", "سَنِة", "f1492980085755x258619767380878340/U2_Milon_86.mp3"],
     ["היום", "אֵלִיוֹם", "اليوم"],
-    ["מחר", "בֻּכְּרַא", "بُكْرَا"],
-    ["אתמול", "מבַּארֶח", "مْبارِح"]
+    ["מחר", "בֻּכְּרַא", "بُكْرَا", "f1493012146354x780433672713115800/U3_Milon_119.mp3"],
+    ["אתמול", "מבַּארֶח", "مْبارِح", "f1493140314507x384373147971928100/U4_Milon_133.mp3"]
 ];
 
 const totalSkillLevel = 4;
@@ -71,6 +74,10 @@ class Word {
     hebrew!: string;
     arabic!: string;
     hebrewTransliterated!: string;
+    audio!: string;
+    points = 0
+    lastPracticeDate = new Date()
+    totalPracticeCount = 0
 
     constructor(fields: Partial<Word>) {
         Object.assign(this, fields);
@@ -86,17 +93,15 @@ class Word {
             this.points = points;
         }
     }
-    points = 0
-    lastPracticeDate = new Date()
-    totalPracticeCount = 0
+
 }
 
 
 
 function convertDataToObjects(data: string[][]) {
     return data.map((row, id) => {
-        const [hebrew, hebrewTransliterated, arabic] = row;
-        return new Word({ id, hebrew, hebrewTransliterated, arabic });
+        const [hebrew, hebrewTransliterated, arabic, audio] = row;
+        return new Word({ id, hebrew, hebrewTransliterated, arabic, audio});
     });
 }
 
@@ -133,6 +138,8 @@ function renderCard(word: Word) {
                     <h1>${word[answersLang]}</h1>
                     <h1>${word[mainLang]}</h1>
                     <p>${word.hebrewTransliterated}</p>
+                    ${word.audio?'<audio controls width="100" height="100"><source src='
+                    +audioPath+word.audio+' type="audio/mp3"></audio>':''}
                 </div>
             </div>
         </div>
@@ -154,11 +161,12 @@ function onAnswer(id: number) {
         if (!cardElement) throw new Error('card element not found');
         cardElement.classList.add("to-flip");
         isCorectClicked = true;
-
+        new Audio('https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3').play()
     }
     else {
         document.getElementById(`ans-${id}`)?.classList.add('wrong');
         lastWord.totalPracticeCount--;
+        new Audio('https://assets.mixkit.co/sfx/preview/mixkit-click-error-1110.mp3').play()
     }
 
 }
@@ -194,21 +202,50 @@ function play() {
 function syncWords(data: Word[]) {
     data.forEach(word => word.setPoint(calculatePoints(word)));
     words = data.sort((a, b) => a.points - b.points);
+    // group words by points
+    const groupedWords:Record<string,Word[]> = words.reduce((acc:any, word: Word) => {
+        if (!acc[word.points.toString()]) {
+            acc[word.points] = [];
+        }
+        acc[word.points.toString()].push(word);
+        return acc;
+    } ,{});
+
+    // mixed each group by random order
+    Object.keys(groupedWords).forEach((key:string) => {
+        groupedWords[key] = groupedWords[key].sort(() => Math.random() - 0.5);
+    } );
+
+    // convert the record to an array
+    words = Object.keys(groupedWords).reduce((acc:Word[], key:string) => {
+        return acc.concat(groupedWords[key]);
+    },[]);
+    
     localStorage.setItem('words', JSON.stringify(words));
 }
 
 let words: Word[] = [];
 
 function getWords() {
+    let words = convertDataToObjects(dataArray);
     const wordsString = localStorage.getItem("words");
+   
     if (wordsString) {
         const data = JSON.parse(wordsString);
-        return data.map((word: Word) => {
-            return new Word(word);
-        });
-    } else {
-        return convertDataToObjects(dataArray);
-    }
+        const wordsFromLocalStorage = data.map((word: Word) => new Word(word));
+
+        // merge the words from local storage with the words from the data
+        words = words.map((word: Word) => {
+            const wordFromLocalStorage = wordsFromLocalStorage.find((w: Word) => w.id === word.id);
+            // replace match fields from the local storage if exists
+            if (wordFromLocalStorage) {
+                return new Word({ ...word, ...wordFromLocalStorage });
+            }
+            return word;
+        })
+    } 
+    
+    return words;
 }
 
 function calculatePoints(word: Word) {
