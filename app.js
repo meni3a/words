@@ -136,6 +136,7 @@ function onAnswer(id) {
     if (!lastWord || isCorectClicked)
         return;
     if (lastWord.id === id) {
+        new Audio('https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3').play();
         (_a = document.getElementById(`ans-${id}`)) === null || _a === void 0 ? void 0 : _a.classList.add('correct');
         lastWord.totalPracticeCount++;
         lastWord.lastPracticeDate = new Date();
@@ -144,12 +145,11 @@ function onAnswer(id) {
             throw new Error('card element not found');
         cardElement.classList.add("to-flip");
         isCorectClicked = true;
-        new Audio('https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3').play();
     }
     else {
+        new Audio('https://assets.mixkit.co/sfx/preview/mixkit-click-error-1110.mp3').play();
         (_b = document.getElementById(`ans-${id}`)) === null || _b === void 0 ? void 0 : _b.classList.add('wrong');
         lastWord.totalPracticeCount--;
-        new Audio('https://assets.mixkit.co/sfx/preview/mixkit-click-error-1110.mp3').play();
     }
 }
 let lastWord = undefined;
