@@ -50,11 +50,11 @@ body {
 }
 
 .correct{
-    border: 2px solid green !important;
+    border: 1px solid green !important;
 }
 
 .wrong{
-    border: 2px solid red !important;
+    border: 1px solid red !important;
 }
 
 .answer-btn {
