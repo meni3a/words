@@ -233,7 +233,7 @@ function getWords() {
 function calculatePoints(word) {
     const getPrecentage = (num, total) => Math.floor((num / total) * 100);
     const calculateFirstTwoStartsByMintuesSinceLastPractice = (date) => {
-        const maxNumnerOfMinutes = 10;
+        const maxNumnerOfMinutes = 1440;
         const minutesSinceLastPractice = Math.floor((new Date().getTime() - date.getTime()) / (1000 * 60));
         if (minutesSinceLastPractice > maxNumnerOfMinutes) {
             return 0;
