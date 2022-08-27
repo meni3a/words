@@ -16,8 +16,12 @@ self.addEventListener('install', event =>  {
   console.log('Installing');
   event.waitUntil(
     caches.open(staticCacheName).then(function (cache) {
-      cache.addAll(filesToCache);
-      console.log('cached files');
+      cache.addAll(filesToCache).then((res)=>{
+        console.log('cache added');
+        return res;
+      }).catch(function (err) {
+        console.log('Error caching files', err);
+      });
     }));
   
 });
@@ -30,6 +34,7 @@ self.addEventListener('fetch', event =>  {
       if (response) {
         return response;
       } else {
+        console.log('fetching from network');
         return fetch(event.request);
       }
     }));
