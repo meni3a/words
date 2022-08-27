@@ -289,7 +289,7 @@ class App {
         this.backgroundMusic = await new Audio('./assets/turkish-beat.mp3');
         this.backgroundMusic.loop = true;
         this.backgroundMusic.volume = 0.3;
-        this.backgroundMusic.play();
+        this.backgroundMusic.play().catch(err => console.log(err));
         this.words = this.getWords();
         this.syncWords(this.words);
         this.elements.totalRank.innerText = "Rank: " + this.calculateTotalRank().toString();

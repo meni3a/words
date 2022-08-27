@@ -4,9 +4,11 @@ const filesToCache = [
   '/app.js',
   '/app.css',
   '/manifest.webmanifest',
-  '/assets/correct.mp3',
-  '/assets/incorrect.mp3',
-  '/assets/turkish-beat.mp3',
+  'assets/correct.mp3',
+  'assets/incorrect.mp3',
+  'assets/turkish-beat.mp3',
+  'assets/home-icon.png',
+  'assets/front_img.png'
 ];
 
 self.addEventListener('install', event =>  {
