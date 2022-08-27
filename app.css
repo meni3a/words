@@ -118,6 +118,18 @@ body {
     transform: rotateY(180deg);
 }
 
+#totalRank{
+    /* border: 1px solid #ccc; */
+    padding: 10px;
+    border-radius: 15px;
+    width: 50%;
+    color:
+    white;
+    font-weight: 300;
+    -webkit-box-shadow: 0px 0px 12px -1px #fffefe;
+    box-shadow: 0px 0px 7px -1px #ffffff;
+}
+
 .button {
     background-color: #c96b00;
     /* Green */

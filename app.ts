@@ -187,9 +187,7 @@ function getAnswers(word: Word) {
 
 function play() {
     
-    const playBtn = document.getElementById('start-btn');
-    if (!playBtn) throw new Error('play button not found');
-    playBtn.innerText = 'Next';
+    switchToGameMode();
 
     isCorectClicked = false;
     const container = document.getElementById("container");
@@ -203,6 +201,18 @@ function play() {
     lastWord = words.shift();
     if (!lastWord) return;
     container.innerHTML = renderCard(lastWord);
+}
+
+function switchToGameMode() {
+    const playBtn = document.getElementById('start-btn');
+    if (!playBtn)
+        throw new Error('play button not found');
+    playBtn.innerText = 'Next';
+
+    const appHeader = document.getElementById('app-header');
+    if (!appHeader)
+        throw new Error('app header not found');
+    appHeader.style.display = 'none';
 }
 
 function syncWords(data: Word[]) {
@@ -286,6 +296,11 @@ function calculatePoints(word: Word) {
 function setupApp() {
     words = getWords();
     syncWords(words);
+
+    const rank = document.getElementById('totalRank');
+    if (!rank) throw new Error('rank element not found');
+    const totalRank = words.reduce((acc: number, word: Word) => acc + word.points, 0);
+    rank.innerText = "Rank: " + totalRank.toString();
 }
 
 window.onload = setupApp;
