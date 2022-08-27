@@ -65,8 +65,8 @@ const dataArray: string[][] = [
 ];
 
 const config = {
-    totalSkillLevel:4,
-    maxNumnerOfMinutes : 1440
+    totalSkillLevel: 4,
+    maxNumnerOfMinutes: 1440
 }
 
 
@@ -108,7 +108,7 @@ type Elements = {
 
 class App {
 
-    constructor() {}
+    constructor() { }
 
     totalSkillLevel = 4;
     lastWord: Word | undefined = undefined;
@@ -230,7 +230,10 @@ class App {
 
     switchToGameMode() {
 
-        this.backgroundMusic?.paused ? this.backgroundMusic?.play() : null;
+        if (this.backgroundMusic?.paused) {
+            this.backgroundMusic?.play();
+           this.isSoundMuted = false; 
+       }
 
         this.elements.homeBtn.style.display = 'block';
 
@@ -291,7 +294,7 @@ class App {
     calculatePoints(word: Word) {
         const getPrecentage = (num: number, total: number) => Math.floor((num / total) * 100);
         const calculateFirstTwoStartsByMintuesSinceLastPractice = (date: Date) => {
-            
+
             const minutesSinceLastPractice = Math.floor((new Date().getTime() - date.getTime()) / (1000 * 60));
 
             if (minutesSinceLastPractice > config.maxNumnerOfMinutes) {
@@ -364,7 +367,7 @@ class App {
             this.handleHomeClick();
         });
 
-        this.elements.speaker.addEventListener('click', () => {            
+        this.elements.speaker.addEventListener('click', () => {
             this.handleSpeakerClick();
         });
 
@@ -379,9 +382,13 @@ class App {
         this.isSoundMuted = !this.isSoundMuted;
         if (this.isSoundMuted) {
             this.backgroundMusic?.pause();
+            this.isSoundMuted = true;
         }
         else {
-            this.backgroundMusic?.paused ? this.backgroundMusic?.play() : null;
+            if (this.backgroundMusic?.paused) {
+                 this.backgroundMusic?.play();
+                this.isSoundMuted = false; 
+            }
         }
     }
 
@@ -399,7 +406,7 @@ class App {
     }
 
 }
-let app : App;
+let app: App;
 function setupApp() {
     app = new App();
     app.init();
