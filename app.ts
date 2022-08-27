@@ -293,7 +293,15 @@ function calculatePoints(word: Word) {
 
 }
 
-function setupApp() {
+async function setupApp() {
+
+    // handle background music
+    backgroundMusic = await new Audio('https://cdn.pixabay.com/download/audio/2022/01/20/audio_a10a705146.mp3?filename=turkish-beat-15167.mp3');
+    backgroundMusic.loop = true;
+    backgroundMusic.volume = 0.5;
+    backgroundMusic.play();
+    
+    
     words = getWords();
     syncWords(words);
 
@@ -301,6 +309,18 @@ function setupApp() {
     if (!rank) throw new Error('rank element not found');
     const totalRank = words.reduce((acc: number, word: Word) => acc + word.points, 0);
     rank.innerText = "Rank: " + totalRank.toString();
+}
+let isSoundMuted = false;
+let backgroundMusic: HTMLAudioElement | undefined = undefined;
+function handleSpeakerClick(speaker: HTMLElement) {
+    speaker.classList.toggle("on");
+    isSoundMuted = !isSoundMuted;
+    if (isSoundMuted) {
+        backgroundMusic?.pause();
+    }
+    else{
+        backgroundMusic?.paused ? backgroundMusic?.play() : null;
+    }
 }
 
 window.onload = setupApp;

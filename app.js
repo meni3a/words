@@ -253,7 +253,12 @@ function calculatePoints(word) {
     };
     return calculateFirstTwoStartsByMintuesSinceLastPractice(new Date(word.lastPracticeDate)) + calculateLastTwoStartsByAmountOfPractice();
 }
-function setupApp() {
+async function setupApp() {
+    // handle background music
+    backgroundMusic = await new Audio('https://cdn.pixabay.com/download/audio/2022/01/20/audio_a10a705146.mp3?filename=turkish-beat-15167.mp3');
+    backgroundMusic.loop = true;
+    backgroundMusic.volume = 0.5;
+    backgroundMusic.play();
     words = getWords();
     syncWords(words);
     const rank = document.getElementById('totalRank');
@@ -261,5 +266,17 @@ function setupApp() {
         throw new Error('rank element not found');
     const totalRank = words.reduce((acc, word) => acc + word.points, 0);
     rank.innerText = "Rank: " + totalRank.toString();
+}
+let isSoundMuted = false;
+let backgroundMusic = undefined;
+function handleSpeakerClick(speaker) {
+    speaker.classList.toggle("on");
+    isSoundMuted = !isSoundMuted;
+    if (isSoundMuted) {
+        backgroundMusic === null || backgroundMusic === void 0 ? void 0 : backgroundMusic.pause();
+    }
+    else {
+        (backgroundMusic === null || backgroundMusic === void 0 ? void 0 : backgroundMusic.paused) ? backgroundMusic === null || backgroundMusic === void 0 ? void 0 : backgroundMusic.play() : null;
+    }
 }
 window.onload = setupApp;
