@@ -1,5 +1,4 @@
 "use strict";
-const audioPath = 'https://s3.amazonaws.com/appforest_uf/';
 const dataArray = [
     ["איך", "כִּיף", "كيف", "f1492943198336x339902958134189250/U1_Milon_2.mp3"],
     ["איפה", "וֵין", "وِين", "f1492943187830x667188051389530200/U1_Milon_3.mp3"],
@@ -65,7 +64,10 @@ const dataArray = [
     ["מחר", "בֻּכְּרַא", "بُكْرَا", "f1493012146354x780433672713115800/U3_Milon_119.mp3"],
     ["אתמול", "מבַּארֶח", "مْبارِح", "f1493140314507x384373147971928100/U4_Milon_133.mp3"]
 ];
-const totalSkillLevel = 4;
+const config = {
+    totalSkillLevel: 4,
+    maxNumnerOfMinutes: 1440
+};
 class Word {
     constructor(fields) {
         this.points = 0;
@@ -74,8 +76,8 @@ class Word {
         Object.assign(this, fields);
     }
     setPoint(points) {
-        if (points > totalSkillLevel) {
-            this.points = totalSkillLevel;
+        if (points > config.totalSkillLevel) {
+            this.points = config.totalSkillLevel;
         }
         else if (points < 0) {
             this.points = 0;
@@ -85,34 +87,48 @@ class Word {
         }
     }
 }
-function convertDataToObjects(data) {
-    return data.map((row, id) => {
-        const [hebrew, hebrewTransliterated, arabic, audio] = row;
-        return new Word({ id, hebrew, hebrewTransliterated, arabic, audio });
-    });
-}
-const range = (n) => Array.from(Array(n).keys());
-function pickRandomWords(numberOfWords) {
-    const randomIndexes = new Set();
-    while (randomIndexes.size < numberOfWords) {
-        randomIndexes.add(Math.floor(Math.random() * words.length));
+class App {
+    constructor() {
+        this.totalSkillLevel = 4;
+        this.lastWord = undefined;
+        this.isCorectClicked = false;
+        this.words = [];
+        this.isSoundMuted = false;
+        this.backgroundMusic = undefined;
+        this.audioPath = 'https://s3.amazonaws.com/appforest_uf/';
+        this.elements = this.getAllHtmlElements();
+        this.range = (n) => Array.from(Array(n).keys());
     }
-    return [...randomIndexes].map(i => words[i]);
-}
-function renderCard(word) {
-    const answers = getAnswers(word);
-    const randomLanguage = Math.floor(Math.random() * 2);
-    const mainLang = randomLanguage === 0 ? 'hebrew' : 'arabic';
-    const answersLang = randomLanguage === 0 ? 'arabic' : 'hebrew';
-    return `
+    calculateTotalRank() {
+        return this.words.reduce((acc, word) => acc + word.points, 0);
+    }
+    convertDataToObjects(data) {
+        return data.map((row, id) => {
+            const [hebrew, hebrewTransliterated, arabic, audio] = row;
+            return new Word({ id, hebrew, hebrewTransliterated, arabic, audio });
+        });
+    }
+    pickRandomWords(numberOfWords) {
+        const randomIndexes = new Set();
+        while (randomIndexes.size < numberOfWords) {
+            randomIndexes.add(Math.floor(Math.random() * this.words.length));
+        }
+        return [...randomIndexes].map(i => this.words[i]);
+    }
+    renderCard(word) {
+        const answers = this.getAnswers(word);
+        const randomLanguage = Math.floor(Math.random() * 2);
+        const mainLang = randomLanguage === 0 ? 'hebrew' : 'arabic';
+        const answersLang = randomLanguage === 0 ? 'arabic' : 'hebrew';
+        return `
     <div class="card-container center">
-        <div class="flip-card center">
+        <div id="flip-card" class="center">
             <div class="flip-card-inner center">
                 <div class="flip-card-front center">
                     <h1>${word[mainLang]}</h1>
                     <div class="skill">
-                    ${range(word.points).map(() => `<span class="star">*</span>`).join('')}
-                    ${range(totalSkillLevel - word.points).map(() => `<span class="empty-star">*</span>`).join('')}
+                    ${this.range(word.points).map(() => `<span class="star">*</span>`).join('')}
+                    ${this.range(config.totalSkillLevel - word.points).map(() => `<span class="empty-star">*</span>`).join('')}
                     </div>
                 </div>
                 <div class="flip-card-back center">
@@ -120,7 +136,7 @@ function renderCard(word) {
                     <h1>${word[mainLang]}</h1>
                     <p>${word.hebrewTransliterated}</p>
                     ${word.audio ? '<audio controls width="100" height="100"><source src='
-        + audioPath + word.audio + ' type="audio/mp3"></audio>' : ''}
+            + this.audioPath + word.audio + ' type="audio/mp3"></audio>' : ''}
                 </div>
             </div>
         </div>
@@ -130,153 +146,190 @@ function renderCard(word) {
         </div>
     </div>
     `;
-}
-function onAnswer(id) {
-    var _a, _b;
-    if (!lastWord || isCorectClicked)
-        return;
-    if (lastWord.id === id) {
-        new Audio('https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3').play();
-        (_a = document.getElementById(`ans-${id}`)) === null || _a === void 0 ? void 0 : _a.classList.add('correct');
-        lastWord.totalPracticeCount++;
-        lastWord.lastPracticeDate = new Date();
-        const cardElement = document.getElementsByClassName('flip-card')[0];
-        if (!cardElement)
-            throw new Error('card element not found');
-        cardElement.classList.add("to-flip");
-        isCorectClicked = true;
     }
-    else {
-        new Audio('https://assets.mixkit.co/sfx/preview/mixkit-click-error-1110.mp3').play();
-        (_b = document.getElementById(`ans-${id}`)) === null || _b === void 0 ? void 0 : _b.classList.add('wrong');
-        lastWord.totalPracticeCount--;
-    }
-}
-let lastWord = undefined;
-let isCorectClicked = false;
-function getAnswers(word) {
-    const answers = [...pickRandomWords(3), word];
-    // mix the answers
-    for (let i = answers.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [answers[i], answers[j]] = [answers[j], answers[i]];
-    }
-    return answers;
-}
-function play() {
-    switchToGameMode();
-    isCorectClicked = false;
-    const container = document.getElementById("container");
-    if (!container)
-        return;
-    if (lastWord) {
-        lastWord.totalPracticeCount++;
-        lastWord.lastPracticeDate = new Date();
-        words.push(lastWord);
-        syncWords(words);
-    }
-    lastWord = words.shift();
-    if (!lastWord)
-        return;
-    container.innerHTML = renderCard(lastWord);
-}
-function switchToGameMode() {
-    const playBtn = document.getElementById('start-btn');
-    if (!playBtn)
-        throw new Error('play button not found');
-    playBtn.innerText = 'Next';
-    const appHeader = document.getElementById('app-header');
-    if (!appHeader)
-        throw new Error('app header not found');
-    appHeader.style.display = 'none';
-}
-function syncWords(data) {
-    data.forEach(word => word.setPoint(calculatePoints(word)));
-    words = data.sort((a, b) => a.points - b.points);
-    // group words by points
-    const groupedWords = words.reduce((acc, word) => {
-        if (!acc[word.points.toString()]) {
-            acc[word.points] = [];
-        }
-        acc[word.points.toString()].push(word);
-        return acc;
-    }, {});
-    // mixed each group by random order
-    Object.keys(groupedWords).forEach((key) => {
-        groupedWords[key] = groupedWords[key].sort(() => Math.random() - 0.5);
-    });
-    // convert the record to an array
-    words = Object.keys(groupedWords).reduce((acc, key) => {
-        return acc.concat(groupedWords[key]);
-    }, []);
-    localStorage.setItem('words', JSON.stringify(words));
-}
-let words = [];
-function getWords() {
-    let words = convertDataToObjects(dataArray);
-    const wordsString = localStorage.getItem("words");
-    if (wordsString) {
-        const data = JSON.parse(wordsString);
-        const wordsFromLocalStorage = data.map((word) => new Word(word));
-        // merge the words from local storage with the words from the data
-        words = words.map((word) => {
-            const wordFromLocalStorage = wordsFromLocalStorage.find((w) => w.id === word.id);
-            // replace match fields from the local storage if exists
-            if (wordFromLocalStorage) {
-                return new Word(Object.assign(Object.assign({}, word), wordFromLocalStorage));
-            }
-            return word;
-        });
-    }
-    return words;
-}
-function calculatePoints(word) {
-    const getPrecentage = (num, total) => Math.floor((num / total) * 100);
-    const calculateFirstTwoStartsByMintuesSinceLastPractice = (date) => {
-        const maxNumnerOfMinutes = 1440;
-        const minutesSinceLastPractice = Math.floor((new Date().getTime() - date.getTime()) / (1000 * 60));
-        if (minutesSinceLastPractice > maxNumnerOfMinutes) {
-            return 0;
+    onAnswer(id) {
+        var _a, _b, _c;
+        if (!this.lastWord || this.isCorectClicked)
+            return;
+        if (this.lastWord.id === id) {
+            new Audio('https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3').play();
+            (_a = document.getElementById(`ans-${id}`)) === null || _a === void 0 ? void 0 : _a.classList.add('correct');
+            this.lastWord.totalPracticeCount++;
+            this.lastWord.lastPracticeDate = new Date();
+            (_b = document.getElementById('flip-card')) === null || _b === void 0 ? void 0 : _b.classList.add("to-flip");
+            this.isCorectClicked = true;
         }
         else {
-            const precentage = getPrecentage(minutesSinceLastPractice, maxNumnerOfMinutes);
-            if (precentage > 50) {
-                return 1;
+            new Audio('https://assets.mixkit.co/sfx/preview/mixkit-click-error-1110.mp3').play();
+            (_c = document.getElementById(`ans-${id}`)) === null || _c === void 0 ? void 0 : _c.classList.add('wrong');
+            this.lastWord.totalPracticeCount--;
+        }
+    }
+    getAnswers(word) {
+        const answers = [...this.pickRandomWords(3), word];
+        // mix the answers
+        for (let i = answers.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [answers[i], answers[j]] = [answers[j], answers[i]];
+        }
+        return answers;
+    }
+    play() {
+        this.switchToGameMode();
+        this.isCorectClicked = false;
+        if (this.lastWord) {
+            this.lastWord.totalPracticeCount++;
+            this.words.push(this.lastWord);
+            this.syncWords(this.words);
+        }
+        this.lastWord = this.words.shift();
+        if (!this.lastWord)
+            return;
+        this.elements.container.innerHTML = this.renderCard(this.lastWord);
+    }
+    switchToGameMode() {
+        var _a, _b;
+        ((_a = this.backgroundMusic) === null || _a === void 0 ? void 0 : _a.paused) ? (_b = this.backgroundMusic) === null || _b === void 0 ? void 0 : _b.play() : null;
+        this.elements.homeBtn.style.display = 'block';
+        this.elements.playBtn.innerText = 'Next';
+        this.elements.appHeader.style.display = 'none';
+    }
+    syncWords(data) {
+        data.forEach(word => word.setPoint(this.calculatePoints(word)));
+        this.words = data.sort((a, b) => a.points - b.points);
+        // group words by points
+        const groupedWords = this.words.reduce((acc, word) => {
+            if (!acc[word.points.toString()]) {
+                acc[word.points] = [];
+            }
+            acc[word.points.toString()].push(word);
+            return acc;
+        }, {});
+        // mixed each group by random order
+        Object.keys(groupedWords).forEach((key) => {
+            groupedWords[key] = groupedWords[key].sort(() => Math.random() - 0.5);
+        });
+        // convert the record to an array
+        this.words = Object.keys(groupedWords).reduce((acc, key) => {
+            return acc.concat(groupedWords[key]);
+        }, []);
+        localStorage.setItem('words', JSON.stringify(this.words));
+    }
+    getWords() {
+        let words = this.convertDataToObjects(dataArray);
+        const wordsString = localStorage.getItem("words");
+        if (wordsString) {
+            const data = JSON.parse(wordsString);
+            const wordsFromLocalStorage = data.map((word) => new Word(word));
+            // merge the words from local storage with the words from the data
+            words = words.map((word) => {
+                const wordFromLocalStorage = wordsFromLocalStorage.find((w) => w.id === word.id);
+                // replace match fields from the local storage if exists
+                if (wordFromLocalStorage) {
+                    return new Word(Object.assign(Object.assign({}, word), wordFromLocalStorage));
+                }
+                return word;
+            });
+        }
+        return words;
+    }
+    calculatePoints(word) {
+        const getPrecentage = (num, total) => Math.floor((num / total) * 100);
+        const calculateFirstTwoStartsByMintuesSinceLastPractice = (date) => {
+            const minutesSinceLastPractice = Math.floor((new Date().getTime() - date.getTime()) / (1000 * 60));
+            if (minutesSinceLastPractice > config.maxNumnerOfMinutes) {
+                return 0;
             }
             else {
-                return 2;
+                const precentage = getPrecentage(minutesSinceLastPractice, config.maxNumnerOfMinutes);
+                if (precentage > 50) {
+                    return 1;
+                }
+                else {
+                    return 2;
+                }
             }
+        };
+        const calculateLastTwoStartsByAmountOfPractice = () => {
+            return Math.min(Math.round(word.totalPracticeCount / 2), 2);
+        };
+        return calculateFirstTwoStartsByMintuesSinceLastPractice(new Date(word.lastPracticeDate)) + calculateLastTwoStartsByAmountOfPractice();
+    }
+    getAllHtmlElements() {
+        const homeBtn = document.getElementById("home-btn");
+        if (!homeBtn)
+            throw new Error("no home-btn found");
+        const playBtn = document.getElementById('play-btn');
+        if (!playBtn)
+            throw new Error('play button not found');
+        const appHeader = document.getElementById('app-header');
+        if (!appHeader)
+            throw new Error('app header not found');
+        const container = document.getElementById("container");
+        if (!container)
+            throw new Error('container not found');
+        const totalRank = document.getElementById("totalRank");
+        if (!totalRank)
+            throw new Error('total rank not found');
+        const speaker = document.getElementById("speaker");
+        if (!speaker)
+            throw new Error('speaker not found');
+        return {
+            homeBtn,
+            playBtn,
+            appHeader,
+            container,
+            totalRank,
+            speaker
+        };
+    }
+    async init() {
+        this.createListeners();
+        // handle background music
+        this.backgroundMusic = await new Audio('https://cdn.pixabay.com/download/audio/2022/01/20/audio_a10a705146.mp3?filename=turkish-beat-15167.mp3');
+        this.backgroundMusic.loop = true;
+        this.backgroundMusic.volume = 0.3;
+        this.backgroundMusic.play();
+        this.words = this.getWords();
+        this.syncWords(this.words);
+        this.elements.totalRank.innerText = "Rank: " + this.calculateTotalRank().toString();
+    }
+    createListeners() {
+        this.elements.homeBtn.addEventListener('click', () => {
+            this.handleHomeClick();
+        });
+        this.elements.speaker.addEventListener('click', () => {
+            this.handleSpeakerClick();
+        });
+        this.elements.playBtn.addEventListener('click', () => {
+            this.play();
+        });
+    }
+    handleSpeakerClick() {
+        var _a, _b, _c;
+        this.elements.speaker.classList.toggle("on");
+        this.isSoundMuted = !this.isSoundMuted;
+        if (this.isSoundMuted) {
+            (_a = this.backgroundMusic) === null || _a === void 0 ? void 0 : _a.pause();
         }
-    };
-    const calculateLastTwoStartsByAmountOfPractice = () => {
-        return Math.min(Math.round(word.totalPracticeCount / 2), 2);
-    };
-    return calculateFirstTwoStartsByMintuesSinceLastPractice(new Date(word.lastPracticeDate)) + calculateLastTwoStartsByAmountOfPractice();
-}
-async function setupApp() {
-    // handle background music
-    backgroundMusic = await new Audio('https://cdn.pixabay.com/download/audio/2022/01/20/audio_a10a705146.mp3?filename=turkish-beat-15167.mp3');
-    backgroundMusic.loop = true;
-    backgroundMusic.volume = 0.5;
-    backgroundMusic.play();
-    words = getWords();
-    syncWords(words);
-    const rank = document.getElementById('totalRank');
-    if (!rank)
-        throw new Error('rank element not found');
-    const totalRank = words.reduce((acc, word) => acc + word.points, 0);
-    rank.innerText = "Rank: " + totalRank.toString();
-}
-let isSoundMuted = false;
-let backgroundMusic = undefined;
-function handleSpeakerClick(speaker) {
-    speaker.classList.toggle("on");
-    isSoundMuted = !isSoundMuted;
-    if (isSoundMuted) {
-        backgroundMusic === null || backgroundMusic === void 0 ? void 0 : backgroundMusic.pause();
+        else {
+            ((_b = this.backgroundMusic) === null || _b === void 0 ? void 0 : _b.paused) ? (_c = this.backgroundMusic) === null || _c === void 0 ? void 0 : _c.play() : null;
+        }
     }
-    else {
-        (backgroundMusic === null || backgroundMusic === void 0 ? void 0 : backgroundMusic.paused) ? backgroundMusic === null || backgroundMusic === void 0 ? void 0 : backgroundMusic.play() : null;
+    handleHomeClick() {
+        this.elements.homeBtn.style.display = 'none';
+        this.elements.appHeader.style.display = 'flex';
+        this.elements.container.innerHTML = '';
+        this.elements.playBtn.innerText = 'Start';
+        this.elements.totalRank.innerText = "Rank: " + this.calculateTotalRank().toString();
     }
+}
+let app;
+function setupApp() {
+    app = new App();
+    app.init();
+}
+function onAnswer(id) {
+    app.onAnswer(id);
 }
 window.onload = setupApp;

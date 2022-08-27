@@ -36,7 +36,6 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-
 }
 
 .word-area {
@@ -73,7 +72,7 @@ body {
     background-color: #fff;
 }
 
-.flip-card {
+#flip-card {
     background-color: transparent;
     width: 300px;
     height: 300px;
@@ -144,6 +143,17 @@ body {
     cursor: pointer;
 }
 
+.topleft {
+    width: 100;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+}
+
+#home-btn{
+    display: none;
+}
+
 /* speaker */
 
 .bottomright {
@@ -162,21 +172,21 @@ body {
 }
 
 /* ---- */
-.speaker {
+#speaker {
   height: 40px;
   width: 40px;
   position: absolute;
   overflow: hidden;
   margin: 5px;
 }
-.speaker span {
+#speaker span {
   display: block;
   width: 7px;
   height: 7px;
   background: #fff;
   margin: 12px 0 0 1px;
 }
-.speaker span:after {
+#speaker span:after {
   content: '';
   position: absolute;
   width: 0;
@@ -187,7 +197,7 @@ body {
   left: -13px;
   top: 5px;
 }
-.speaker span:before {
+#speaker span:before {
   transform: rotate(45deg);
   border-radius: 0 50px 0 0;
   content: '';
@@ -204,9 +214,9 @@ body {
 
 
 
-.speaker.on .mute {opacity:1; transform: scale(1);}
-.speaker.on span:before {transform: scale(0.8) translate(-17px, 0) rotate(42deg);}
-/*.speaker.on:hover .mute {transform: rotate(180deg); }*/
+#speaker.on .mute {opacity:1; transform: scale(1);}
+#speaker.on span:before {transform: scale(0.8) translate(-17px, 0) rotate(42deg);}
+/*#speaker.on:hover .mute {transform: rotate(180deg); }*/
 
 
 

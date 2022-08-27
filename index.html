@@ -12,18 +12,21 @@
     <div class="wrapper center">
         <div id="container"></div>
         <div id="app-header" class="center">
-            <img src="https://cdn-icons-png.flaticon.com/512/190/190600.png" width="200" height="200" alt="">
+            <img src="./front_img.png" width="200" height="200" alt="">
             <h1 style="color:#57acc1">كَلِمَات</h1>
             <h3 id="totalRank"></h3>
-
         </div>
         <br>
         <br>
-        <button id="start-btn" class="button center" onclick="play()">Start</button>
-
+        <button id="play-btn" class="button center">Start</button>
+        <div class="topleft">
+            <div id="home-btn">
+            <img src="./home-icon.png" width="49" height="49" alt="">
+            </div>
+        </div>
         <div class="bottomright">
             <div class="round">
-                <div class="speaker" onclick="handleSpeakerClick(this)">
+                <div id="speaker">
                     <div id="mute" class="mute"> </div>
                     <span></span>
                 </div>
