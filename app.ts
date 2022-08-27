@@ -230,9 +230,9 @@ class App {
 
     switchToGameMode() {
 
-        if (this.backgroundMusic?.paused) {
+        if (this.backgroundMusic?.paused && !this.isSoundMuted) {
             this.backgroundMusic?.play();
-           this.isSoundMuted = false; 
+            this.isSoundMuted = false; 
        }
 
         this.elements.homeBtn.style.display = 'block';
@@ -353,7 +353,6 @@ class App {
         this.backgroundMusic = await new Audio('./assets/turkish-beat.mp3');
         this.backgroundMusic.loop = true;
         this.backgroundMusic.volume = 0.3;
-        this.backgroundMusic.play().catch(err => console.log(err));
 
         this.words = this.getWords();
         this.syncWords(this.words);
@@ -376,7 +375,6 @@ class App {
         });
     }
 
-
     handleSpeakerClick() {
         this.elements.speaker.classList.toggle("on");
         this.isSoundMuted = !this.isSoundMuted;
@@ -386,7 +384,7 @@ class App {
         }
         else {
             if (this.backgroundMusic?.paused) {
-                 this.backgroundMusic?.play();
+                this.backgroundMusic?.play();
                 this.isSoundMuted = false; 
             }
         }

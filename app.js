@@ -189,7 +189,10 @@ class App {
     }
     switchToGameMode() {
         var _a, _b;
-        ((_a = this.backgroundMusic) === null || _a === void 0 ? void 0 : _a.paused) ? (_b = this.backgroundMusic) === null || _b === void 0 ? void 0 : _b.play() : null;
+        if (((_a = this.backgroundMusic) === null || _a === void 0 ? void 0 : _a.paused) && !this.isSoundMuted) {
+            (_b = this.backgroundMusic) === null || _b === void 0 ? void 0 : _b.play();
+            this.isSoundMuted = false;
+        }
         this.elements.homeBtn.style.display = 'block';
         this.elements.playBtn.innerText = 'Next';
         this.elements.appHeader.style.display = 'none';
@@ -289,7 +292,6 @@ class App {
         this.backgroundMusic = await new Audio('./assets/turkish-beat.mp3');
         this.backgroundMusic.loop = true;
         this.backgroundMusic.volume = 0.3;
-        this.backgroundMusic.play().catch(err => console.log(err));
         this.words = this.getWords();
         this.syncWords(this.words);
         this.elements.totalRank.innerText = "Rank: " + this.calculateTotalRank().toString();
@@ -311,9 +313,13 @@ class App {
         this.isSoundMuted = !this.isSoundMuted;
         if (this.isSoundMuted) {
             (_a = this.backgroundMusic) === null || _a === void 0 ? void 0 : _a.pause();
+            this.isSoundMuted = true;
         }
         else {
-            ((_b = this.backgroundMusic) === null || _b === void 0 ? void 0 : _b.paused) ? (_c = this.backgroundMusic) === null || _c === void 0 ? void 0 : _c.play() : null;
+            if ((_b = this.backgroundMusic) === null || _b === void 0 ? void 0 : _b.paused) {
+                (_c = this.backgroundMusic) === null || _c === void 0 ? void 0 : _c.play();
+                this.isSoundMuted = false;
+            }
         }
     }
     handleHomeClick() {
