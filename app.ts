@@ -183,7 +183,7 @@ class App {
     onAnswer(id: number) {
         if (!this.lastWord || this.isCorectClicked) return;
         if (this.lastWord.id === id) {
-            new Audio('https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3').play()
+            new Audio('./correct.mp3').play()
             document.getElementById(`ans-${id}`)?.classList.add('correct');
             this.lastWord.totalPracticeCount++;
             this.lastWord.lastPracticeDate = new Date();
@@ -193,7 +193,7 @@ class App {
 
         }
         else {
-            new Audio('https://assets.mixkit.co/sfx/preview/mixkit-click-error-1110.mp3').play()
+            new Audio('./incorrect.mp3').play()
             document.getElementById(`ans-${id}`)?.classList.add('wrong');
             this.lastWord.totalPracticeCount--;
         }

@@ -152,7 +152,7 @@ class App {
         if (!this.lastWord || this.isCorectClicked)
             return;
         if (this.lastWord.id === id) {
-            new Audio('https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3').play();
+            new Audio('./assets/correct.mp3').play();
             (_a = document.getElementById(`ans-${id}`)) === null || _a === void 0 ? void 0 : _a.classList.add('correct');
             this.lastWord.totalPracticeCount++;
             this.lastWord.lastPracticeDate = new Date();
@@ -160,7 +160,7 @@ class App {
             this.isCorectClicked = true;
         }
         else {
-            new Audio('https://assets.mixkit.co/sfx/preview/mixkit-click-error-1110.mp3').play();
+            new Audio('./assets/incorrect.mp3').play();
             (_c = document.getElementById(`ans-${id}`)) === null || _c === void 0 ? void 0 : _c.classList.add('wrong');
             this.lastWord.totalPracticeCount--;
         }
