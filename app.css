@@ -49,11 +49,11 @@ body {
 }
 
 .correct{
-    border: 1px solid green !important;
+    border: 1.2px solid green !important;
 }
 
 .wrong{
-    border: 1px solid red !important;
+    border: 1.2px solid red !important;
 }
 
 .answer-btn {
@@ -68,8 +68,8 @@ body {
 }
 
 .answer-btn:hover {
-    color: #0a1f37;
-    background-color: #fff;
+    color: white;
+    background-color: #17314e;
 }
 
 #flip-card {
