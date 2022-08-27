@@ -47,36 +47,36 @@
                     console.log(err);
                 });
 
-                navigator.serviceWorker.ready.then(function (registration) {
-                    if (!registration.pushManager) {
-                        console.log('No push notifications support.');
-                        return false;
-                    }
-                    //To subscribe `push notification` from push manager
-                    registration.pushManager.subscribe({
-                        userVisibleOnly: true //Always show notification when received
-                    })
-                        .then(function (subscription) {
-                            console.log('Subscribed.');
-                        })
-                        .catch(function (error) {
-                            console.log('Subscription error: ', error);
-                        });
-                })
+                // navigator.serviceWorker.ready.then(function (registration) {
+                //     if (!registration.pushManager) {
+                //         console.log('No push notifications support.');
+                //         return false;
+                //     }
+                //     //To subscribe `push notification` from push manager
+                //     registration.pushManager.subscribe({
+                //         userVisibleOnly: true //Always show notification when received
+                //     })
+                //         .then(function (subscription) {
+                //             console.log('Subscribed.');
+                //         })
+                //         .catch(function (error) {
+                //             console.log('Subscription error: ', error);
+                //         });
+                // })
 
-                window.addEventListener('beforeinstallprompt', e => {
-                    console.log('beforeinstallprompt Event fired');
-                    e.preventDefault();
-                    // Stash the event so it can be triggered later.
-                    this.deferredPrompt = e;
-                    return false;
-                });
-                // When you want to trigger prompt:
-                this.deferredPrompt.prompt();
-                this.deferredPrompt.userChoice.then(choice => {
-                    console.log(choice);
-                });
-                this.deferredPrompt = null;
+                // window.addEventListener('beforeinstallprompt', e => {
+                //     console.log('beforeinstallprompt Event fired');
+                //     e.preventDefault();
+                //     // Stash the event so it can be triggered later.
+                //     this.deferredPrompt = e;
+                //     return false;
+                // });
+                // // When you want to trigger prompt:
+                // this.deferredPrompt.prompt();
+                // this.deferredPrompt.userChoice.then(choice => {
+                //     console.log(choice);
+                // });
+                // this.deferredPrompt = null;
             });
 
 

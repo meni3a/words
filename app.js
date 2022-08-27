@@ -286,7 +286,7 @@ class App {
     async init() {
         this.createListeners();
         // handle background music
-        this.backgroundMusic = await new Audio('https://cdn.pixabay.com/download/audio/2022/01/20/audio_a10a705146.mp3?filename=turkish-beat-15167.mp3');
+        this.backgroundMusic = await new Audio('./assets/turkish-beat.mp3');
         this.backgroundMusic.loop = true;
         this.backgroundMusic.volume = 0.3;
         this.backgroundMusic.play();

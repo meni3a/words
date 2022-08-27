@@ -183,7 +183,7 @@ class App {
     onAnswer(id: number) {
         if (!this.lastWord || this.isCorectClicked) return;
         if (this.lastWord.id === id) {
-            new Audio('./correct.mp3').play()
+            new Audio('./assets/correct.mp3').play()
             document.getElementById(`ans-${id}`)?.classList.add('correct');
             this.lastWord.totalPracticeCount++;
             this.lastWord.lastPracticeDate = new Date();
@@ -193,7 +193,7 @@ class App {
 
         }
         else {
-            new Audio('./incorrect.mp3').play()
+            new Audio('./assets/incorrect.mp3').play()
             document.getElementById(`ans-${id}`)?.classList.add('wrong');
             this.lastWord.totalPracticeCount--;
         }
@@ -347,7 +347,7 @@ class App {
         this.createListeners();
 
         // handle background music
-        this.backgroundMusic = await new Audio('https://cdn.pixabay.com/download/audio/2022/01/20/audio_a10a705146.mp3?filename=turkish-beat-15167.mp3');
+        this.backgroundMusic = await new Audio('./assets/turkish-beat.mp3');
         this.backgroundMusic.loop = true;
         this.backgroundMusic.volume = 0.3;
         this.backgroundMusic.play();
