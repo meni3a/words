@@ -1,5 +1,6 @@
 const staticCacheName = 'site-static-v1';
 const filesToCache = [
+  '/',
   '/index.html',
   '/app.js',
   '/app.css',
