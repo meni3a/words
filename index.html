@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="./app.js"></script>
     <link rel="stylesheet" href="./app.css">
+    <link rel="manifest" href="./manifest.webmanifest">
 </head>
 
 <body>
@@ -45,7 +46,7 @@
 
                 navigator.serviceWorker.ready.then(function (registration) {
                     if (!registration.pushManager) {
-                        alert('No push notifications support.');
+                        console.log('No push notifications support.');
                         return false;
                     }
                     //To subscribe `push notification` from push manager
