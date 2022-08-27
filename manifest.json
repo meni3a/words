@@ -1,0 +1,16 @@
+{
+    "short_name": "كَلِمَات",
+    "name": "كَلِمَات",
+    "icons": [
+    {
+    "src":"https://cdn-icons-png.flaticon.com/512/190/190600.png",
+    "sizes": "192x192",
+    "type": "image/png"
+    }
+    ],
+    "start_url": "/",
+    "background_color": "#e05a47",
+    "theme_color": "#e05a47",
+    "display": "standalone"
+  }
+  
