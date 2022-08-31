@@ -111,7 +111,10 @@ class App {
     pickRandomWords(numberOfWords) {
         const randomIndexes = new Set();
         while (randomIndexes.size < numberOfWords) {
-            randomIndexes.add(Math.floor(Math.random() * this.words.length));
+            const randomIndex = Math.floor(Math.random() * this.words.length);
+            if (!randomIndexes.has(randomIndex)) {
+                randomIndexes.add(randomIndex);
+            }
         }
         return [...randomIndexes].map(i => this.words[i]);
     }
@@ -152,7 +155,7 @@ class App {
         if (!this.lastWord || this.isCorectClicked)
             return;
         if (this.lastWord.id === id) {
-            new Audio('./assets/correct.mp3').play();
+            new Audio('./assets/sounds/correct.mp3').play();
             (_a = document.getElementById(`ans-${id}`)) === null || _a === void 0 ? void 0 : _a.classList.add('correct');
             this.lastWord.totalPracticeCount++;
             this.lastWord.lastPracticeDate = new Date();
@@ -160,7 +163,7 @@ class App {
             this.isCorectClicked = true;
         }
         else {
-            new Audio('./assets/incorrect.mp3').play();
+            new Audio('./assets/sounds/incorrect.mp3').play();
             (_c = document.getElementById(`ans-${id}`)) === null || _c === void 0 ? void 0 : _c.classList.add('wrong');
             this.lastWord.totalPracticeCount--;
         }
@@ -289,7 +292,7 @@ class App {
     async init() {
         this.createListeners();
         // handle background music
-        this.backgroundMusic = await new Audio('./assets/turkish-beat.mp3');
+        this.backgroundMusic = await new Audio('./assets/sounds/turkish-beat.mp3');
         this.backgroundMusic.loop = true;
         this.backgroundMusic.volume = 0.3;
         this.words = this.getWords();
