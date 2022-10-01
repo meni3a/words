@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/meni3a/words/issues"
   },
-  "homepage": "https://github.com/meni3a/words#readme"
+  "homepage": "https://github.com/meni3a/words#readme",
+  "devDependencies": {
+    "@types/node": "^18.7.23"
+  }
 }
