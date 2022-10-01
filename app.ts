@@ -169,7 +169,8 @@ type Elements = {
     appHeader: HTMLElement,
     container: HTMLElement,
     totalRank: HTMLElement,
-    speaker: HTMLElement
+    speaker: HTMLElement,
+    progress: HTMLElement
 }
 
 class App {
@@ -184,6 +185,9 @@ class App {
     backgroundMusic: HTMLAudioElement | undefined = undefined;
     audioPath = 'https://s3.amazonaws.com/appforest_uf/';
     elements: Elements = this.getAllHtmlElements();
+
+    answersCounter: number = 0;
+    totalWords: number = 0;
 
 
     range = (n: number) => Array.from(Array(n).keys());
@@ -243,13 +247,14 @@ class App {
         </div>
         <div class="word-area">
 
-        ${answers.map((answerWord) => `<button id=ans-${answerWord.id} class="answer-btn" onclick="onAnswer(${answerWord.id})">${answerWord[answersLang]}</button>`).join('')}
+        ${answers.map((answerWord) => `<button id=ans-${answerWord.id} class="answer-btn" onclick="app.onAnswer(${answerWord.id})">${answerWord[answersLang]}</button>`).join('')}
         </div>
     </div>
     `;
     }
 
     onAnswer(id: number) {
+
         if (!this.lastWord || this.isCorectClicked) return;
         if (this.lastWord.id === id) {
             new Audio('./assets/sounds/correct.mp3').play()
@@ -287,6 +292,14 @@ class App {
 
         this.isCorectClicked = false;
 
+        this.answersCounter++;
+
+        if(this.answersCounter > this.totalWords){
+            this.answersCounter = 1;
+        }
+
+        this.elements.progress.innerText = `${this.answersCounter}/${this.totalWords}`;
+
         if (this.lastWord) {
             this.lastWord.totalPracticeCount++;
             this.words.push(this.lastWord);
@@ -303,6 +316,8 @@ class App {
             this.backgroundMusic?.play();
             this.isSoundMuted = false; 
        }
+
+       this.elements.progress.style.display = 'flex';
 
         this.elements.homeBtn.style.display = 'block';
 
@@ -391,18 +406,17 @@ class App {
 
     getAllHtmlElements(): Elements {
         const homeBtn = document.getElementById("home-btn");
-        if (!homeBtn) throw new Error("no home-btn found");
-        const playBtn = document.getElementById('play-btn');
-        if (!playBtn) throw new Error('play button not found');
         const appHeader = document.getElementById('app-header');
-        if (!appHeader) throw new Error('app header not found');
+        const playBtn = document.getElementById('play-btn');
         const container = document.getElementById("container");
-        if (!container) throw new Error('container not found');
         const totalRank = document.getElementById("totalRank");
-        if (!totalRank) throw new Error('total rank not found');
-
         const speaker = document.getElementById("speaker");
-        if (!speaker) throw new Error('speaker not found');
+        const progress = document.getElementById("progress");
+
+
+        if (!homeBtn || !appHeader || !playBtn || !container || !totalRank || !progress || !speaker) {
+            throw new Error("Missing html elements");
+        }
 
 
         return {
@@ -411,7 +425,8 @@ class App {
             appHeader,
             container,
             totalRank,
-            speaker
+            speaker,
+            progress
         }
     }
 
@@ -422,10 +437,10 @@ class App {
         this.backgroundMusic = await new Audio('./assets/sounds/turkish-beat.mp3');
         this.backgroundMusic.loop = true;
         this.backgroundMusic.volume = 0.3;
-
+        
         this.words = this.getWords();
         this.syncWords(this.words);
-
+        this.totalWords = this.words.length;
         this.elements.totalRank.innerText = "Rank: " + this.calculateTotalRank().toString();
 
     }
@@ -468,6 +483,8 @@ class App {
 
         this.elements.playBtn.innerText = 'Start';
 
+        this.elements.progress.style.display = 'none';
+
         this.elements.totalRank.innerText = "Rank: " + this.calculateTotalRank().toString();
 
     }
@@ -479,8 +496,5 @@ function setupApp() {
     app.init();
 }
 
-function onAnswer(id: number) {
-    app.onAnswer(id);
-}
 
 window.onload = setupApp;

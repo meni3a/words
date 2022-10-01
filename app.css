@@ -150,6 +150,18 @@ body {
     left: 20px;
 }
 
+.topright {
+    width: 100;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+}
+
+#progress{
+    display: none;
+    color: white;
+    font-size: 17px;
+}
 #home-btn{
     display: none;
 }
